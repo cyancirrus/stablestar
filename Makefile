@@ -18,16 +18,16 @@ NVCC_HOST_DEBUG_FLAGS := -arch=$(ARCH) \
 			  -Xcompiler -fsanitize=address \
 			  -Xcompiler -fsanitize=undefined \
 			  -Xcompiler -fsanitize=leak \
-			  {BULLET_INCLUDE}
+			  ${BULLET_INCLUDE}
 
 NVCC_CUDA_DEBUG_FLAGS := -arch=$(ARCH) \
 			  -O1 \
 			  -g -G \
-			  {BULLET_INCLUDE}
+			  ${BULLET_INCLUDE}
 
 NVCC_RELEASE_FLAGS := -arch=$(ARCH) \
 			  -O2 \
-			  {BULLET_INCLUDE}
+			  ${BULLET_INCLUDE}
 
 # Targets
 BUILD_DIR := target
