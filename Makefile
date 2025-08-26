@@ -4,7 +4,13 @@ APPLICATION_NAME := stablestar
 VERSION := 0.0.0
 
 # Compiler 
+# NVCC := nvcc
 NVCC := nvcc
+
+BULLET_INCLUDE := -I/usr/include/bullet \
+				  -lBulletDynamics \
+				  -lBulletCollision \
+				  -lLinearMath
 
 NVCC_HOST_DEBUG_FLAGS := -arch=$(ARCH) \
 			  -O1 \
@@ -12,13 +18,16 @@ NVCC_HOST_DEBUG_FLAGS := -arch=$(ARCH) \
 			  -Xcompiler -fsanitize=address \
 			  -Xcompiler -fsanitize=undefined \
 			  -Xcompiler -fsanitize=leak \
+			  {BULLET_INCLUDE}
 
 NVCC_CUDA_DEBUG_FLAGS := -arch=$(ARCH) \
 			  -O1 \
 			  -g -G \
+			  {BULLET_INCLUDE}
 
 NVCC_RELEASE_FLAGS := -arch=$(ARCH) \
 			  -O2 \
+			  {BULLET_INCLUDE}
 
 # Targets
 BUILD_DIR := target

@@ -1,7 +1,7 @@
-#include <vector>
+// #include <vector>
 #include <iostream>
 #include <btBulletDynamicsCommon.h>
-using std::vector;
+// using std::vector;
 
 struct Pendulum {
 	float theta;
