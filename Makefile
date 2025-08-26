@@ -1,6 +1,6 @@
 ARCH := sm_75
 
-APPLICATION_NAME := moonlight
+APPLICATION_NAME := stablestar
 VERSION := 0.0.0
 
 # Compiler 
@@ -12,16 +12,13 @@ NVCC_HOST_DEBUG_FLAGS := -arch=$(ARCH) \
 			  -Xcompiler -fsanitize=address \
 			  -Xcompiler -fsanitize=undefined \
 			  -Xcompiler -fsanitize=leak \
-			  -Wno-deprecated-gpu-targets
 
 NVCC_CUDA_DEBUG_FLAGS := -arch=$(ARCH) \
 			  -O1 \
 			  -g -G \
-			  -Wno-deprecated-gpu-targets
 
 NVCC_RELEASE_FLAGS := -arch=$(ARCH) \
 			  -O2 \
-			  -Wno-deprecated-gpu-targets \
 
 # Targets
 BUILD_DIR := target
