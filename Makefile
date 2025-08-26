@@ -26,7 +26,8 @@ NVCC_RELEASE_FLAGS := -arch=$(ARCH) \
 # Targets
 BUILD_DIR := target
 RELEASE_DIR := build
-SRC := src/main.cu src/pipeline.cu
+# SRC := src/main.cu src/pipeline.cu
+SRC := src/main.cpp
 TARGET := $(BUILD_DIR)/$(APPLICATION_NAME)
 RELEASE := $(RELEASE_DIR)/$(APPLICATION_NAME)-$(VERSION)
 
