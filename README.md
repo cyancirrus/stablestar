@@ -96,3 +96,4 @@ This kernel-pipeline pattern is the core abstraction:
 * Built & tested on **Arch Linux** with `CUDA 13.0`.
 * GPU: **NVIDIA RTX 2070** (compute capability `sm_75`).
 * Compiler: `nvcc` with `clangd` LSP integration.
+# stablestar
