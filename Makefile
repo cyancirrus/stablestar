@@ -8,13 +8,13 @@ VERSION := 0.0.0
 NVCC := nvcc
 
 BULLET_INCLUDE := -I/usr/include/bullet \
-				  -lBulletDynamics \
-				  -lBulletCollision \
-				  -lLinearMath
 
-RENDERER := -lGL \
-			-lGLEW \
-			-lglfw \
+LINKER_FLAGS := -lBulletDynamics \
+				-lBulletCollision \
+				-lLinearMath
+				-lGL \
+				-lGLEW \
+				-lglfw \
 
 NVCC_HOST_DEBUG_FLAGS := -arch=$(ARCH) \
 			  -O1 \
@@ -22,19 +22,16 @@ NVCC_HOST_DEBUG_FLAGS := -arch=$(ARCH) \
 			  -Xcompiler -fsanitize=address \
 			  -Xcompiler -fsanitize=undefined \
 			  -Xcompiler -fsanitize=leak \
-			  ${BULLET_INCLUDE} \
-			  $(RENDERER)
+			  ${BULLET_INCLUDE}
 
 NVCC_CUDA_DEBUG_FLAGS := -arch=$(ARCH) \
 			  -O1 \
 			  -g -G \
-			  ${BULLET_INCLUDE} \
-			  $(RENDERER)
+			  ${BULLET_INCLUDE}
 
 NVCC_RELEASE_FLAGS := -arch=$(ARCH) \
 			  -O2 \
-			  ${BULLET_INCLUDE} \
-			  $(RENDERER)
+			  ${BULLET_INCLUDE}
 
 # Targets
 BUILD_DIR := target
@@ -48,7 +45,7 @@ all: $(TARGET)
 
 $(TARGET): $(SRC)
 	mkdir -p $(BUILD_DIR)
-	$(NVCC) $(NVCC_CUDA_DEBUG_FLAGS) $^ -o $@
+	$(NVCC) $(NVCC_CUDA_DEBUG_FLAGS) $^ -o $@ $(LINKER_FLAGS)
 
 run: $(TARGET)
 	./$(TARGET)
