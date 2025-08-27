@@ -12,28 +12,35 @@ BULLET_INCLUDE := -I/usr/include/bullet \
 				  -lBulletCollision \
 				  -lLinearMath
 
+RENDERER := -lGL \
+			-lGLEW \
+			-lglfw \
+
 NVCC_HOST_DEBUG_FLAGS := -arch=$(ARCH) \
 			  -O1 \
 			  -g -G \
 			  -Xcompiler -fsanitize=address \
 			  -Xcompiler -fsanitize=undefined \
 			  -Xcompiler -fsanitize=leak \
-			  ${BULLET_INCLUDE}
+			  ${BULLET_INCLUDE} \
+			  $(RENDERER)
 
 NVCC_CUDA_DEBUG_FLAGS := -arch=$(ARCH) \
 			  -O1 \
 			  -g -G \
-			  ${BULLET_INCLUDE}
+			  ${BULLET_INCLUDE} \
+			  $(RENDERER)
 
 NVCC_RELEASE_FLAGS := -arch=$(ARCH) \
 			  -O2 \
-			  ${BULLET_INCLUDE}
+			  ${BULLET_INCLUDE} \
+			  $(RENDERER)
 
 # Targets
 BUILD_DIR := target
 RELEASE_DIR := build
 # SRC := src/main.cu src/pipeline.cu
-SRC := src/main.cpp
+SRC := src/main.cpp 
 TARGET := $(BUILD_DIR)/$(APPLICATION_NAME)
 RELEASE := $(RELEASE_DIR)/$(APPLICATION_NAME)-$(VERSION)
 
