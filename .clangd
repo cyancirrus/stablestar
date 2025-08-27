@@ -1,9 +1,5 @@
 CompileFlags:
   CompilationDatabase: build
-  Add: [-std=c++17, -I/usr/include/bullet/BulletDynamics]
-
-
-# FallbackFlags: [-std=c++17]
+  Add: [-std=c++17, -I/usr/include/bullet ]
 
 Compiler: clang++
-# Compiler: /usr/local/cuda/bin/nvcc
