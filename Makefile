@@ -11,10 +11,10 @@ BULLET_INCLUDE := -I/usr/include/bullet \
 
 LINKER_FLAGS := -lBulletDynamics \
 				-lBulletCollision \
-				-lLinearMath
+				-lLinearMath \
 				-lGL \
 				-lGLEW \
-				-lglfw \
+				-lglfw
 
 NVCC_HOST_DEBUG_FLAGS := -arch=$(ARCH) \
 			  -O1 \
@@ -45,6 +45,7 @@ all: $(TARGET)
 
 $(TARGET): $(SRC)
 	mkdir -p $(BUILD_DIR)
+	# $(NVCC) $(NVCC_CUDA_DEBUG_FLAGS) $^ -o $@ $(LINKER_FLAGS)
 	$(NVCC) $(NVCC_CUDA_DEBUG_FLAGS) $^ -o $@ $(LINKER_FLAGS)
 
 run: $(TARGET)

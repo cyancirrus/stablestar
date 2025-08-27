@@ -1,0 +1,4 @@
+mkdir -p target
+# nvcc -arch=sm_75 -O1 -g -G -I/usr/include/bullet  src/main.cpp -o target/stablestar -lBulletDynamics -lBulletCollision -lLinearMath -lGL -lGLEW -lglfw
+nvcc -arch=sm_75 -O1 -g -G -I/usr/include/bullet  src/main.cpp -o target/stablestar -lBulletDynamics -lBulletCollision -lLinearMath -lGL -lGLEW -lglfw
+./target/stablestar
