@@ -45,7 +45,6 @@ all: $(TARGET)
 
 $(TARGET): $(SRC)
 	mkdir -p $(BUILD_DIR)
-	# $(NVCC) $(NVCC_CUDA_DEBUG_FLAGS) $^ -o $@ $(LINKER_FLAGS)
 	$(NVCC) $(NVCC_CUDA_DEBUG_FLAGS) $^ -o $@ $(LINKER_FLAGS)
 
 run: $(TARGET)
