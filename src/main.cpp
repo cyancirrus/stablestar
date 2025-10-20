@@ -52,10 +52,13 @@ void PendulumCart::step(float dt) {
 }
 
 void PendulumCart::control(float dt, float kp, float kd) {
-	float force = -kp * theta -kd * theta_dot;
-	theta_dot += dt * (M + m) * g/(M * l) * theta - force/(M * l);
+	float force = +kp * theta +kd * theta_dot;
+	float theta_dot_dot = g/l * sin(theta) - force / (M * l);
+	float x_dot_dot = force - m * l * theta_dot_dot / (M + m);
+
+	theta_dot += dt * theta_dot_dot;
 	theta += dt * theta_dot;
-	x_dot += dt * (-m * g  * theta + force ) / M;
+	x_dot += dt * x_dot_dot;
 	x += dt * x_dot;
 }
 
@@ -88,7 +91,7 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		// p.step(0.01f);
-		p.control(0.01f, 2.0f, 1.0f);
+		p.control(0.01f, 100.0f, 10.0f);
 		// p.control(0.01f, 20.0f, 6.0f);
 
 		auto [cart, pendulum_x, pendulum_y] = p.position();
