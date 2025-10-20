@@ -69,9 +69,22 @@ struct InvPendulum {
 // }
 int main(void) {
 
-	InvPendulum p;
-	for(int i=0; i<30; i++) {
-		p.control(0.1f, 12.0f, 2.0f);
+	// InvPendulum p;
+	// for(int i=0; i<30; i++) {
+	// 	p.control(0.1f, 12.0f, 2.0f);
+	// 	std::cout << p.theta << " " << p.theta_d << "\n";
+	// }
+InvPendulum p;
+
+	for(int i=0; i<100; ++i) {
+		// simulate 9 natural steps
+		for(int j=0; j<9; ++j)
+			p.step(0.01f);
+
+		// apply control every 10th step
+		// p.control(0.01f, 15.0f, 2.0f);
+		p.control(0.01f, 100.0f, 2.0f);
+
 		std::cout << p.theta << " " << p.theta_d << "\n";
 	}
 
