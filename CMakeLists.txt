@@ -10,6 +10,7 @@ include_directories(${BULLET_INCLUDE_DIRS})
 
 add_executable(stablestar
 	src/main.cpp
+	src/pendulum.cpp
 )
 target_link_libraries(stablestar ${BULLET_LIBRARIES})
 
