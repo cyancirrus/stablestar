@@ -52,21 +52,16 @@ void PendulumCart::step(float dt) {
 }
 
 void PendulumCart::control(float dt, float kp, float kd) {
-	float force = +kp * theta +kd * theta_dot;
-	float theta_dot_dot = g/l * sin(theta) - force / (M * l);
-	float x_dot_dot = force - m * l * theta_dot_dot / (M + m);
-
-	theta_dot += dt * theta_dot_dot;
+	float force = kp * theta +kd * theta_dot;
+	theta_dot += dt * ((M + m) * g/(M * l) * sin(theta) - force/(M * l));
 	theta += dt * theta_dot;
-	x_dot += dt * x_dot_dot;
+	x_dot += dt * (-m * g * theta + force ) / M;
 	x += dt * x_dot;
 }
 
 State PendulumCart::position(void) {
 	return State { x, x + sin(theta), cos(theta), };
 }
-
-
 
 int main() {
 	const float SCALE = 0.25;
