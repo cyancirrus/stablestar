@@ -51,6 +51,13 @@ void PendulumCart::step(float dt) {
 	x += dt * x_dot;
 }
 
+// void PendulumCart::control(float dt, float kp, float kd) {
+// 	float force = -kp * theta -kd * theta_dot;
+// 	theta_dot += dt * (M + m) * g/(M * l) * theta - force/(M * l);
+// 	theta += dt * theta_dot;
+// 	x_dot += dt * (-m * g  * theta + force ) / M;
+// 	x += dt * x_dot;
+// }
 void PendulumCart::control(float dt, float kp, float kd) {
 	float force = -kp * theta -kd * theta_dot;
 	theta_dot += dt * (M + m) * g/(M * l) * theta - force/(M * l);
@@ -88,7 +95,7 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		// p.step(0.01f);
-		p.control(0.01f, 20.0f, 6.0f);
+		p.control(0.01f, 2.0f, 1.0f);
 		// p.control(0.01f, 20.0f, 6.0f);
 
 		auto [cart, pendulum_x, pendulum_y] = p.position();
@@ -102,14 +109,14 @@ int main() {
 
 		// Box;
 		glBegin(GL_QUADS);
-			glVertex2f(cart + OFFSET, cart + OFFSET);
-			glVertex2f(cart - OFFSET, cart + OFFSET);
-			glVertex2f(cart - OFFSET, cart - OFFSET);
-			glVertex2f(cart + OFFSET, cart - OFFSET);
+			glVertex2f(cart + OFFSET, + OFFSET);
+			glVertex2f(cart - OFFSET, + OFFSET);
+			glVertex2f(cart - OFFSET, - OFFSET);
+			glVertex2f(cart + OFFSET, - OFFSET);
 		glEnd();
 		// Pendulum
 		glBegin(GL_LINES);
-			glVertex2f(cart, cart); // pivot
+			glVertex2f(cart, 0.0f); // pivot
 			glVertex2f(pendulum_x, pendulum_y);       // bob
 		glEnd();
 
