@@ -1,12 +1,10 @@
 #include <iostream>
 // #include "pendulum.h"
-#include <vector>
 #include <btBulletDynamicsCommon.h>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <random>
 #include <cmath>
-using std::vector;
 
 static constexpr float g = 9.18f;
 static constexpr float l = 1.0f;
@@ -86,7 +84,7 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		// p.step(0.01f);
-		p.control(0.01f, 100.0f, 10.0f);
+		p.control(0.01f, 50.0f, 10.0f);
 		// p.control(0.01f, 20.0f, 6.0f);
 
 		auto [cart, pendulum_x, pendulum_y] = p.position();
