@@ -141,10 +141,10 @@ int main() {
 
     glfwMakeContextCurrent(window);
 	PendulumCart p(4.0, 2.0, 3.0);
-	axis_draw(10, 0.01f, -0.9f, -0.9f, 0.9f, 0.9f, 0.9f, -0.9f);
 
 
 	while (!glfwWindowShouldClose(window)) {
+		axis_draw(10, 0.01f, -0.9f, -0.9f, 0.9f, 0.9f, 0.9f, -0.9f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		// Use with PendulumCart p(1.0, 1.0, 1.0);
 		// p.control(0.01f, 50.0f, 10.0f);
