@@ -105,6 +105,7 @@ int main() {
 	const float SCALE = 0.25f;
 	const float OFFSET = 0.10f; // initialize GLFW;
 	const float VERTICAL_OFFSET = -0.75f;
+	const float ASPECT = 1600.0f/800.0f;
     if (!glfwInit()) {
         std::cerr << "Failed to initialize GLFW\n";
         return -1;
@@ -130,8 +131,8 @@ int main() {
 		auto [cart, pendulum_x, pendulum_y] = p.position();
 		// std::cout << "theta: " << p.theta << "\n";
 		// std::cout << "cart " << cart << " pendulum_x: " << pendulum_x << " pendulum_y " << pendulum_y << "\n";
-		cart *= SCALE;
-		pendulum_x *= SCALE;
+		cart *= SCALE / ASPECT;
+		pendulum_x *= SCALE / ASPECT;
 		pendulum_y *= SCALE;
 		state_label_draw(p.theta, p.x_dot);
 

@@ -30,7 +30,7 @@ struct PendulumCart {
 PendulumCart::PendulumCart(float m_cart, float m_pendulum, float l_pendulum) {
 	static std::random_device rd;
 	static std::mt19937 gen(rd());
-	std::uniform_real_distribution<float> dis(-1.0,1.0);
+	std::uniform_real_distribution<float> dis(-1.5,1.5);
 	mass_cart = m_cart;
 	mass_pendulum = m_pendulum;
 	length_pendulum = l_pendulum;
