@@ -34,8 +34,8 @@ struct PendulumCart {
 PendulumCart::PendulumCart() {
 	static std::random_device rd;
 	static std::mt19937 gen(rd());
-	// std::uniform_real_distribution<float> dis(-1.0,1.0);
-	std::uniform_real_distribution<float> dis(-0.1,0.1);
+	std::uniform_real_distribution<float> dis(-1.0,1.0);
+	// std::uniform_real_distribution<float> dis(-0.1,0.1);
 	theta = dis(gen);
 	theta_dot = 0.0f;
 	x = 0.0f;
@@ -49,10 +49,20 @@ void PendulumCart::step(float dt) {
 	x += dt * x_dot;
 }
 
+// void PendulumCart::control(float dt, float kp, float kd) {
+// 	float force = kp * theta +kd * theta_dot;
+// 	theta_dot += dt * ((M + m) * g/(M * l) * sin(theta) - force/(M * l));
+// 	theta += dt * theta_dot;
+// 	x_dot += dt * (-m * g * theta + force ) / M;
+// 	x += dt * x_dot;
+// }
+
 void PendulumCart::control(float dt, float kp, float kd) {
 	float force = kp * theta +kd * theta_dot;
 	theta_dot += dt * ((M + m) * g/(M * l) * sin(theta) - force/(M * l));
 	theta += dt * theta_dot;
+	// friction
+	x_dot *= 0.99;
 	x_dot += dt * (-m * g * theta + force ) / M;
 	x += dt * x_dot;
 }
@@ -93,7 +103,7 @@ int main() {
 		pendulum_y *= SCALE;
 		std::cout << "cart " << cart << " pendulum_x: " << pendulum_x << " pendulum_y " << pendulum_y << "\n";
 
-		glColor3f(1, 0, 1);
+		glColor3f(0.8, 1, 0.8);
 		glLineWidth(10.0f);
 
 		// Box;
@@ -104,7 +114,7 @@ int main() {
 			glVertex2f(cart + OFFSET, - OFFSET);
 		glEnd();
 		// Pendulum
-		glBegin(GL_LINES);
+		glBegin(GL_LINE_LOOP);
 			glVertex2f(cart, 0.0f); // pivot
 			glVertex2f(pendulum_x, pendulum_y);       // bob
 		glEnd();
