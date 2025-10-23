@@ -55,7 +55,7 @@ void PendulumCart::control(float dt, float kp, float kd) {
 	theta += dt * theta_dot;
 	// friction
 	x_dot *= 0.99;
-	x_dot += dt * (-mass_pendulum * g * theta + force ) / mass_cart;
+	x_dot += dt * (force -mass_pendulum * g * theta ) / mass_cart;
 	x += dt * x_dot;
 }
 
