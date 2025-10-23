@@ -84,7 +84,7 @@ int main() {
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT);
 		axis_draw(10, 0.05f, -0.9f, -0.9f, -0.9f, 0.9f, 0.9f, -0.9f);
-		p.control(0.01f, 50.0f, 3.0f);
+		p.control(0.01f, 50.0f, 2.0f);
 
 		auto [cart, pendulum_x, pendulum_y] = p.position();
 		// std::cout << "theta: " << p.theta << "\n";
