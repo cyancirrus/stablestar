@@ -75,21 +75,30 @@ void state_label_draw(float theta, float velocity) {
     snprintf(buffer, sizeof(buffer), "theta: %.2f, velocity: %.2f", theta, velocity);
     text_draw(buffer, 0.15f, 0.75);
 }
+// void save_frame(int frame_num, int width, int height) {
+//     std::vector<unsigned char> pixels(width * height * 3);
+//     glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, pixels.data());
+    
+//     // Flip vertically (OpenGL's origin is bottom-left)
+//     std::vector<unsigned char> flipped(width * height * 3);
+//     for (int y = 0; y < height; y++) {
+//         memcpy(&flipped[y * width * 3], 
+//                &pixels[(height - 1 - y) * width * 3], 
+//                width * 3);
+//     }
+    
+//     char filename[64];
+//     snprintf(filename, sizeof(filename), "frames/frame_%04d.png", frame_num);
+//     stbi_write_png(filename, width, height, 3, flipped.data(), width * 3);
+// }
+
 void save_frame(int frame_num, int width, int height) {
     std::vector<unsigned char> pixels(width * height * 3);
     glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, pixels.data());
     
-    // Flip vertically (OpenGL's origin is bottom-left)
-    std::vector<unsigned char> flipped(width * height * 3);
-    for (int y = 0; y < height; y++) {
-        memcpy(&flipped[y * width * 3], 
-               &pixels[(height - 1 - y) * width * 3], 
-               width * 3);
-    }
-    
     char filename[64];
     snprintf(filename, sizeof(filename), "frames/frame_%04d.png", frame_num);
-    stbi_write_png(filename, width, height, 3, flipped.data(), width * 3);
+    stbi_write_png(filename, width, height, 3, pixels.data(), width * 3);
 }
 
 int main() {
@@ -116,7 +125,7 @@ int main() {
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT);
 		axis_draw(10, 0.05f, -0.9f, -0.9f, -0.9f, 0.9f, 0.9f, -0.9f);
-		p.control(0.01f, 50.0f, 2.0f);
+		p.control(0.01f, 70.0f, 5.0f);
 
 		auto [cart, pendulum_x, pendulum_y] = p.position();
 		// std::cout << "theta: " << p.theta << "\n";

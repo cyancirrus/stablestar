@@ -1,6 +1,6 @@
-# Moonlight
+# StableStar
 
-**Moonlight** is a C++/CUDA sandbox for experimenting with **GPU-focused numerical computing**.
+**StableStar** is a C++/CUDA sandbox for experimenting with **GPU-focused numerical computing**.
 The goal is to prototype low-level GPU kernels and pipelines, while keeping the workflow strict and ergonomic (sanitizers, LSP, Make targets).
 
 Rust is my main environment for systems + numerical work, but GPU kernels will live here — with `ffi` bridges back into Rust where needed.
@@ -96,4 +96,14 @@ This kernel-pipeline pattern is the core abstraction:
 * Built & tested on **Arch Linux** with `CUDA 13.0`.
 * GPU: **NVIDIA RTX 2070** (compute capability `sm_75`).
 * Compiler: `nvcc` with `clangd` LSP integration.
-# stablestar
+
+## Create control Gif
+
+```shell
+mkdir frames
+ffmpeg -framerate 60 -i frames/frame_%04d.png -vf "fps=30,scale=800:-1:flags=lanczos" control_simulation.gif
+```
+display it in firefox
+```shell
+firefox open control_simulation.gif
+```
