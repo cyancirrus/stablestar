@@ -1,4 +1,6 @@
 #include <iostream>
+#include <string>
+#include <format>
 #include "cart_pendulum.h"
 // #include "pendulum.h"
 #include <btBulletDynamicsCommon.h>
@@ -8,8 +10,8 @@
 #include "stb_easy_font.h"
 
 void text_draw(const char* text, float x, float y, float scale = 0.005f) {
-    static char buffer[1024]; // static so it persists
-    int num_quads = stb_easy_font_print(0, 0, (char*)text, NULL, buffer, sizeof(buffer));
+    static char vertex_buffer[1024]; // static so it persists
+    int num_quads = stb_easy_font_print(0, 0, (char*)text, NULL, vertex_buffer, sizeof(vertex_buffer)*8);
     
     glPushMatrix();
     glTranslatef(x, y, 0.0f);
@@ -17,7 +19,7 @@ void text_draw(const char* text, float x, float y, float scale = 0.005f) {
     
     glColor3f(1.0f, 1.0f, 1.0f);
     glEnableClientState(GL_VERTEX_ARRAY);
-    glVertexPointer(2, GL_FLOAT, 16, buffer);
+    glVertexPointer(2, GL_FLOAT, 16, vertex_buffer);
     glDrawArrays(GL_QUADS, 0, num_quads * 4);
     glDisableClientState(GL_VERTEX_ARRAY);
     glPopMatrix();
@@ -52,6 +54,12 @@ void axis_draw(int steps, float size, float x0, float y0, float x1, float y1, fl
 }
 
 
+void state_label_draw(float theta, float velocity) {
+    char buffer[128];
+    snprintf(buffer, sizeof(buffer), "theta: %.2f, velocity: %.2f", theta, velocity);
+    text_draw(buffer, 0.15f, 0.75);
+}
+
 
 int main() {
 	const float SCALE = 0.25f;
@@ -70,19 +78,21 @@ int main() {
 
 
     glfwMakeContextCurrent(window);
-	PendulumCart p(2.0f, 3.0f, 3.25f);
+	PendulumCart p(3.0f, 1.0f, 1.25f);
 
 
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT);
 		axis_draw(10, 0.05f, -0.9f, -0.9f, -0.9f, 0.9f, 0.9f, -0.9f);
-		p.control(0.01f, 20.0f, 3.0f);
+		p.control(0.01f, 50.0f, 3.0f);
 
 		auto [cart, pendulum_x, pendulum_y] = p.position();
+		// std::cout << "theta: " << p.theta << "\n";
+		// std::cout << "cart " << cart << " pendulum_x: " << pendulum_x << " pendulum_y " << pendulum_y << "\n";
 		cart *= SCALE;
 		pendulum_x *= SCALE;
 		pendulum_y *= SCALE;
-		std::cout << "cart " << cart << " pendulum_x: " << pendulum_x << " pendulum_y " << pendulum_y << "\n";
+		state_label_draw(p.theta, p.x_dot);
 
 		glLineWidth(10.0f);
 
