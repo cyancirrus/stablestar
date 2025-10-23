@@ -7,7 +7,8 @@ VERSION := 0.0.0
 # COMPILIER := nvcc
 COMPILIER := nvcc
 
-BULLET_INCLUDE := -I/usr/include/bullet \
+INCLUDE_FLAGS := -I/usr/include/bullet \
+				  -I/usr/include/stb \
 
 LINKER_FLAGS := -lBulletDynamics \
 				-lBulletCollision \
@@ -22,16 +23,16 @@ COMPILIER_HOST_DEBUG_FLAGS := -arch=$(ARCH) \
 			  -Xcompiler -fsanitize=address \
 			  -Xcompiler -fsanitize=undefined \
 			  -Xcompiler -fsanitize=leak \
-			  ${BULLET_INCLUDE}
+			  ${INCLUDE_FLAGS}
 
 COMPILIER_CUDA_DEBUG_FLAGS := -arch=$(ARCH) \
 			  -O1 \
 			  -g -G \
-			  ${BULLET_INCLUDE}
+			  ${INCLUDE_FLAGS}
 
 COMPILIER_RELEASE_FLAGS := -arch=$(ARCH) \
 			  -O2 \
-			  ${BULLET_INCLUDE}
+			  ${INCLUDE_FLAGS}
 
 # Targets
 BUILD_DIR := target
