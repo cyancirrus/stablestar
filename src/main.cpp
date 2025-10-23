@@ -7,19 +7,14 @@
 #define STB_EASY_FONT_IMPLEMENTATION
 #include "stb_easy_font.h"
 
-#include <random>
-#include <cmath>
-#include <string>
-
-
-void text_draw(const char* text, float x, float y, float scale = 0.01f) {
-    char buffer[1024]; // enough for ~1000 chars
-    int num_quads;
-
-    num_quads = stb_easy_font_print(x , y , (char*)text, NULL, buffer, sizeof(buffer));
-
+void text_draw(const char* text, float x, float y, float scale = 0.005f) {
+    static char buffer[1024]; // static so it persists
+    int num_quads = stb_easy_font_print(0, 0, (char*)text, NULL, buffer, sizeof(buffer));
+    
     glPushMatrix();
-    glScalef(scale, scale, scale);
+    glTranslatef(x, y, 0.0f);
+    glScalef(scale, -scale, 1.0f); // negative Y to flip text right-side up
+    
     glColor3f(1.0f, 1.0f, 1.0f);
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(2, GL_FLOAT, 16, buffer);
@@ -27,31 +22,29 @@ void text_draw(const char* text, float x, float y, float scale = 0.01f) {
     glDisableClientState(GL_VERTEX_ARRAY);
     glPopMatrix();
 }
-
-
 void axis_draw(int steps, float size, float x0, float y0, float x1, float y1, float x2, float y2) {
 	// x0,y0 :: bottom left point
 	// x1, y1 :: top left point
 	// x2, y2 :: bottom right point
-	float x_del = (x2-x0) / steps;
 	float y_del = (y1-y0) / steps;
+	float x_del = (x2-x0) / steps;
 	
-	float y = y0;
-	while (y < y1) {
-		glBegin(GL_LINE_LOOP);
-			glVertex2f(x0 - size, y);
-			glVertex2f(x0 + size, y);
-		glEnd();
-		text_draw(std::to_string(y).c_str(), x0 - size, y - size);
-		y += y_del;
-	}
+	// float y = y0;
+	// while (y < y1) {
+	// 	glBegin(GL_LINE_LOOP);
+	// 		glVertex2f(x0 - size, y);
+	// 		glVertex2f(x0 + size, y);
+	// 	glEnd();
+	// 	// text_draw(std::to_string(y).substr(0, 4).c_str(), x0 , y - size);
+	// 	y += y_del;
+	// }
 	float x = x0;
 	while (x < x2) {
 		glBegin(GL_LINE_LOOP);
-			glVertex2f(x, y1 - size);
-			glVertex2f(x, y1 + size);
+			glVertex2f(x, y0 - size);
+			glVertex2f(x, y0 + size);
 		glEnd();
-		text_draw(std::to_string(x).c_str(), x - size, y - size);
+		text_draw(std::to_string(x).substr(0, 4).c_str(), x + size, y0 - size);
 		x += x_del;
 	}
 }
@@ -59,8 +52,9 @@ void axis_draw(int steps, float size, float x0, float y0, float x1, float y1, fl
 
 
 int main() {
-	const float SCALE = 0.25;
-	const float OFFSET = 0.10; // initialize GLFW;
+	const float SCALE = 0.25f;
+	const float OFFSET = 0.10f; // initialize GLFW;
+	const float VERTICAL_OFFSET = -0.75f;
     if (!glfwInit()) {
         std::cerr << "Failed to initialize GLFW\n";
         return -1;
@@ -74,18 +68,17 @@ int main() {
 
 
     glfwMakeContextCurrent(window);
-	PendulumCart p(4.0, 2.0, 3.0);
+	PendulumCart p(2.0f, 3.0f, 3.25f);
 
 
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT);
-		glColor3f(1.0f, 1.0f, 0.8f);
 		axis_draw(10, 0.05f, -0.9f, -0.9f, -0.9f, 0.9f, 0.9f, -0.9f);
 		// Use with PendulumCart p(1.0, 1.0, 1.0);
-		// p.control(0.01f, 50.0f, 10.0f);
+		// p.control(0.01f, 80.0f, 5.0f);
 		//
 		// Use with PendulumCart p(4.0, 2.0, 3.0);
-		p.control(0.01f, 100.0f, 10.0f);
+		p.control(0.01f, 20.0f, 3.0f);
 
 		auto [cart, pendulum_x, pendulum_y] = p.position();
 		cart *= SCALE;
@@ -93,34 +86,32 @@ int main() {
 		pendulum_y *= SCALE;
 		std::cout << "cart " << cart << " pendulum_x: " << pendulum_x << " pendulum_y " << pendulum_y << "\n";
 
-		glColor3f(0.8, 1, 0.8);
 		glLineWidth(10.0f);
 
 		// Box;
 		glBegin(GL_QUADS);
-			glVertex2f(cart + OFFSET, + OFFSET);
-			glVertex2f(cart - OFFSET, + OFFSET);
-			glVertex2f(cart - OFFSET, - OFFSET);
-			glVertex2f(cart + OFFSET, - OFFSET);
+			glVertex2f(cart + OFFSET, + OFFSET + VERTICAL_OFFSET);
+			glVertex2f(cart - OFFSET, + OFFSET + VERTICAL_OFFSET);
+			glVertex2f(cart - OFFSET, - OFFSET + VERTICAL_OFFSET);
+			glVertex2f(cart + OFFSET, - OFFSET + VERTICAL_OFFSET);
 		glEnd();
 		// Pendulum
 		glBegin(GL_LINE_LOOP);
-			glVertex2f(cart, 0.0f);
-			glVertex2f(pendulum_x, pendulum_y);
+			glVertex2f(cart, VERTICAL_OFFSET);
+			glVertex2f(pendulum_x, pendulum_y + VERTICAL_OFFSET);
+			// glVertex2f(pendulum_x , pendulum_y );
 		glEnd();
-		glColor3f(1, 0, 1);
-		
 		// Axies
 		glLineWidth(5.0f);
 		// y-axis
 		glBegin(GL_LINE_LOOP);
-			glVertex2f(-0.95f, -0.95f);
-			glVertex2f(-0.95f, 0.95f);
+			glVertex2f(-0.9f, -0.9f);
+			glVertex2f(-0.9f, 0.9f);
 		glEnd();
 		// x-axis
 		glBegin(GL_LINE_LOOP);
-			glVertex2f(0.95f, -0.95f);
-			glVertex2f(-0.95f, -0.95f);
+			glVertex2f(0.95f, -0.9f);
+			glVertex2f(-0.95f, -0.9f);
 		glEnd();
 
 		glfwSwapBuffers(window);
