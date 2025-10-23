@@ -29,6 +29,8 @@ void axis_draw(int steps, float size, float x0, float y0, float x1, float y1, fl
 	float y_del = (y1-y0) / steps;
 	float x_del = (x2-x0) / steps;
 	
+	// ticks for y axis are irrelevant for control
+	//
 	// float y = y0;
 	// while (y < y1) {
 	// 	glBegin(GL_LINE_LOOP);
@@ -74,10 +76,6 @@ int main() {
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT);
 		axis_draw(10, 0.05f, -0.9f, -0.9f, -0.9f, 0.9f, 0.9f, -0.9f);
-		// Use with PendulumCart p(1.0, 1.0, 1.0);
-		// p.control(0.01f, 80.0f, 5.0f);
-		//
-		// Use with PendulumCart p(4.0, 2.0, 3.0);
 		p.control(0.01f, 20.0f, 3.0f);
 
 		auto [cart, pendulum_x, pendulum_y] = p.position();
@@ -99,7 +97,6 @@ int main() {
 		glBegin(GL_LINE_LOOP);
 			glVertex2f(cart, VERTICAL_OFFSET);
 			glVertex2f(pendulum_x, pendulum_y + VERTICAL_OFFSET);
-			// glVertex2f(pendulum_x , pendulum_y );
 		glEnd();
 		// Axies
 		glLineWidth(5.0f);
