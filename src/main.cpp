@@ -92,10 +92,7 @@ int main() {
 
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT);
-
-		// p.step(0.01f);
 		p.control(0.01f, 50.0f, 10.0f);
-		// p.control(0.01f, 20.0f, 6.0f);
 
 		auto [cart, pendulum_x, pendulum_y] = p.position();
 		cart *= SCALE;
