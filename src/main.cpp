@@ -1,4 +1,5 @@
 #include <iostream>
+#include "cart_pendulum.h"
 // #include "pendulum.h"
 #include <btBulletDynamicsCommon.h>
 #include <GL/glew.h>
@@ -10,80 +11,12 @@
 #include <cmath>
 #include <string>
 
-static constexpr float g = 9.18f;
-
-struct State {
-	float cart_x;
-	float pendulum_x;
-	float pendulum_y;
-};
-
-struct PendulumCart {
-	float mass_cart;
-	float mass_pendulum;
-	float length_pendulum;
-	// angle offset
-	float theta;
-	float theta_dot;
-	// x offset
-	float x;
-	float x_dot;
-
-	PendulumCart(float m_cart, float m_pendulum, float l_pendulum);
-	void step(float dt);
-	void control(float dt, float kp, float kd);
-	State position(void);
-};
-
-PendulumCart::PendulumCart(float m_cart, float m_pendulum, float l_pendulum) {
-	static std::random_device rd;
-	static std::mt19937 gen(rd());
-	std::uniform_real_distribution<float> dis(-1.0,1.0);
-	mass_cart = m_cart;
-	mass_pendulum = m_pendulum;
-	length_pendulum = l_pendulum;
-	
-	theta = dis(gen);
-	theta_dot = 0.0f;
-	x = 0.0f;
-	x_dot = 0.0f;
-}
-
-void PendulumCart::step(float dt) {
-	theta_dot += dt * (mass_cart + mass_pendulum) * g /(mass_pendulum * length_pendulum) * theta;
-	theta += dt * theta_dot;
-	x_dot += dt * (-mass_cart * g  * theta ) / mass_pendulum;
-	x += dt * x_dot;
-}
-
-void PendulumCart::control(float dt, float kp, float kd) {
-	float force = kp * theta + kd * theta_dot;
-	theta_dot += dt * ((mass_cart + mass_pendulum) * g * sin(theta) - force) /(mass_cart * length_pendulum);
-	theta += dt * theta_dot;
-	// friction
-	x_dot *= 0.99;
-	x_dot += dt * (-mass_pendulum * g * theta + force ) / mass_cart;
-	x += dt * x_dot;
-}
-
-State PendulumCart::position(void) {
-	return State { x, x + sin(theta), cos(theta) * length_pendulum, };
-}
-
-// void text_draw(const char* text, float x, float y) {
-// 	glRasterPos2f(x,y);
-// 	int precision = 0;
-// 	for (const char* c = text; *c != '\0' && precision < 4; c++) {
-// 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c);
-// 		precision += 1;
-// 	}
-// }
 
 void text_draw(const char* text, float x, float y, float scale = 0.01f) {
     char buffer[1024]; // enough for ~1000 chars
     int num_quads;
 
-    num_quads = stb_easy_font_print(x / scale, y / scale, (char*)text, NULL, buffer, sizeof(buffer));
+    num_quads = stb_easy_font_print(x , y , (char*)text, NULL, buffer, sizeof(buffer));
 
     glPushMatrix();
     glScalef(scale, scale, scale);
@@ -139,13 +72,15 @@ int main() {
         return -1;
     }
 
+
     glfwMakeContextCurrent(window);
 	PendulumCart p(4.0, 2.0, 3.0);
 
 
 	while (!glfwWindowShouldClose(window)) {
-		axis_draw(10, 0.01f, -0.9f, -0.9f, 0.9f, 0.9f, 0.9f, -0.9f);
 		glClear(GL_COLOR_BUFFER_BIT);
+		glColor3f(1.0f, 1.0f, 0.8f);
+		axis_draw(10, 0.05f, -0.9f, -0.9f, -0.9f, 0.9f, 0.9f, -0.9f);
 		// Use with PendulumCart p(1.0, 1.0, 1.0);
 		// p.control(0.01f, 50.0f, 10.0f);
 		//

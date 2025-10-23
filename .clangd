@@ -1,5 +1,5 @@
 CompileFlags:
   CompilationDatabase: build
-  Add: [-std=c++17, -I/usr/include/bullet ]
+  Add: [-std=c++17, -I/usr/include/bullet, -I/usr/include/stb]
 
 Compiler: clang++
